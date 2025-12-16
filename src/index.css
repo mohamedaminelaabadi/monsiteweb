@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 0 0% 5%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 85% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 48 100% 50%;
+    --accent-foreground: 0 0% 5%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 0 85% 50%;
+
+    --radius: 0.75rem;
+
+    /* Custom gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(0, 0%, 5%) 0%, hsl(0, 0%, 10%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 10%) 0%, hsl(0, 0%, 6%) 100%);
+    --gradient-red: linear-gradient(135deg, hsl(0, 85%, 50%) 0%, hsl(0, 85%, 40%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(48, 100%, 50%) 0%, hsl(40, 100%, 45%) 100%);
+
+    /* Shadows */
+    --shadow-glow: 0 0 60px hsl(0, 85%, 50%, 0.3);
+    --shadow-card: 0 25px 50px -12px hsl(0, 0%, 0%, 0.5);
+    --shadow-yellow: 0 0 30px hsl(48, 100%, 50%, 0.4);
+  }
+
+  .dark {
+    --background: 0 0% 5%;
+    --foreground: 0 0% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.02em;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg;
+    box-shadow: var(--shadow-glow);
+  }
+
+  .btn-outline {
+    @apply border-2 border-foreground/30 text-foreground px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:border-foreground hover:bg-foreground/5;
+  }
+
+  .card-premium {
+    @apply rounded-2xl p-6 transition-all duration-500 hover:scale-[1.02];
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .badge-new {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider;
+    background: var(--gradient-premium);
+    color: hsl(var(--accent-foreground));
+    box-shadow: var(--shadow-yellow);
+  }
+
+  .badge-accent {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold;
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+
+  .section-title {
+    @apply text-4xl md:text-5xl lg:text-6xl font-display tracking-wide text-foreground mb-4;
+  }
+
+  .glass-card {
+    @apply backdrop-blur-xl rounded-2xl border border-border/50;
+    background: hsl(var(--card) / 0.8);
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-red);
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 30px hsl(0, 85%, 50%, 0.4); }
+  50% { box-shadow: 0 0 60px hsl(0, 85%, 50%, 0.6); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
