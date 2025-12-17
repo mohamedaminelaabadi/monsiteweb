@@ -7,6 +7,10 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff, Lock } from 'lucide-react';
 
+const ADMIN_WHITELIST = new Set<string>([
+  \"779a2c8c-c865-478d-ae81-a04afd53ddec\",
+]);
+
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,6 +24,12 @@ const AdminLogin = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (session?.user) {
+          // WHITELIST ADMIN (bypass DB)
+          if (ADMIN_WHITELIST.has(session.user.id)) {
+            navigate('/admin');
+            return;
+          }
+
           // Check if user has admin role
           const { data: roles } = await supabase
             .from('user_roles')
@@ -37,6 +47,12 @@ const AdminLogin = () => {
     // Check existing session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
+        // WHITELIST ADMIN (bypass DB)
+        if (ADMIN_WHITELIST.has(session.user.id)) {
+          navigate('/admin');
+          return;
+        }
+
         const { data: roles } = await supabase
           .from('user_roles')
           .select('role')
@@ -56,23 +72,6 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
 
-    // ✅ MODE TEST (DEV ONLY)
-    // Permet d'accéder au dashboard sans Supabase pour tester l'UI.
-    // Identifiants:
-    //   Email: admin@test.com
-    //   Mot de passe: admin123
-    // IMPORTANT: ce bloc ne s'active qu'en mode développement (import.meta.env.DEV).
-    if (import.meta.env.DEV) {
-      const isDevAdmin =
-        email.trim().toLowerCase() === 'admin@test.com' && password === 'admin123';
-      if (isDevAdmin) {
-        localStorage.setItem('dev_admin', 'true');
-        setLoading(false);
-        navigate('/admin');
-        return;
-      }
-    }
-
     try {
       if (isSignUp) {
         const { error } = await supabase.auth.signUp({
@@ -84,6 +83,13 @@ const AdminLogin = () => {
         });
 
         if (error) throw error;
+
+
+        // WHITELIST ADMIN (bypass DB)
+        if (ADMIN_WHITELIST.has(data.user.id)) {
+          navigate('/admin');
+          return;
+        }
 
         toast({
           title: "Compte créé",
